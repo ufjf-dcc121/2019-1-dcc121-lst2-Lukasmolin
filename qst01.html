@@ -15,20 +15,30 @@
     </ul>
     <button id="btnLimpar">Limpar</button>
     <script>
+        
+        /*Objeto Item*/
         function Item(nome, quantidade){
             this.nome = nome
             this.quantidade = Number(quantidade)
         }
-
+        /*Objeto Lista*/
         function Lista(elementoUL){
             this._elemento = elementoUL
             this._listaDeElementos = []
         }
         Lista.prototype.add = function(item){
-
+            this._listaDeElementos.push(item)
+            var elem = this._criaElemento(item)
         }
         Lista.prototype.limpar = function(){
-            
+            this._listaDeElementos = []
+            while(this._elemento.firstElementChild)
+                this._elemento.removeChild(this._elemento.firstElementChild)
+        }
+        Lista.prototype._criaElemento = function(item){
+            var elem = document.createElement('li')
+            elem.innerText = item.nome + " " + item.quantidade
+            this._elemento.appendChild(elem)
         }
     </script>
 </body>
