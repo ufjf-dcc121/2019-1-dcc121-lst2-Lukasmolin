@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Qst01 - Lista de Compras</title>
+</head>
+<body>
+    <h1>Lista de Compras:</h1>
+    <form name="formLista">
+        <input type="text" name="nomeItem"/>
+        <input type="number" name="quantidadeItem"/>
+        <input type="submit" value="Adicionar"/>
+    </form>    
+    <ul>
+    </ul>
+    <button id="btnLimpar">Limpar</button>
+    <script>
+        var lista = new Lista(document.querySelector('ul'))
+        var form = document.forms.formLista
+        var btnLimpar = document.getElementById('btnLimpar')
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+            var item = new Item(form.nomeItem.value, form.quantidadeItem.value)
+            lista.add(item)
+            form.reset()
+            form.nomeItem.focus()
+        })
+        btnLimpar.addEventListener('click', function(){
+            lista.limpar();
+        })
+
+        /*Objeto Item*/
+        function Item(nome, quantidade){
+            this.nome = nome
+            this.quantidade = Number(quantidade)
+        }
+        /*Objeto Lista*/
+        function Lista(elementoUL){
+            this._elemento = elementoUL
+            this._listaDeElementos = []
+        }
+        Lista.prototype.add = function(item){
+            this._listaDeElementos.push(item)
+            var elem = this._criaElemento(item)
+        }
+        Lista.prototype.limpar = function(){
+            this._listaDeElementos = []
+            while(this._elemento.firstElementChild)
+                this._elemento.removeChild(this._elemento.firstElementChild)
+        }
+        Lista.prototype._criaElemento = function(item){
+            var elem = document.createElement('li')
+            elem.innerText = item.nome + " " + item.quantidade
+            this._elemento.appendChild(elem)
+        }
+    </script>
+</body>
+</html>
