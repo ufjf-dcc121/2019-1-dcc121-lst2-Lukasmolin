@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Lista de Compras:</h1>
-    <form>
+    <form name="formLista">
         <input type="text" name="nomeItem"/>
         <input type="number" name="quantidadeItem"/>
         <input type="submit" value="Adicionar"/>
@@ -15,7 +15,21 @@
     </ul>
     <button id="btnLimpar">Limpar</button>
     <script>
-        
+        var lista = new Lista(document.querySelector('ul'))
+        var form = document.forms.formLista
+        var btnLimpar = document.getElementById('btnLimpar')
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+            var item = new Item(form.nomeItem.value, form.quantidadeItem.value)
+            lista.add(item)
+            form.reset()
+            form.nomeItem.focus()
+        })
+        btnLimpar.addEventListener('click', function(){
+            lista.limpar();
+        })
+
         /*Objeto Item*/
         function Item(nome, quantidade){
             this.nome = nome
