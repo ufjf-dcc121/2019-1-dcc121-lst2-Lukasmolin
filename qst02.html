@@ -14,6 +14,18 @@
     <ol>
     </ol>
     <script>
+        var form = document.forms.formPilha
+        var pilha = new Pilha()
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault()
+            pilha.empilha(form.item.value)
+        })
+
+        form.btnDesempilha.addEventListener('click', function(){
+            pilha.desempilha()
+        })
+
         /*Classe Pilha*/
         function Pilha() {
             this._olElemento = document.querySelector('ol')
@@ -29,7 +41,7 @@
 
         Pilha.prototype.desempilha = function(){
             this._olElemento.lastElementChild.remove()
-            return this._arr.pop()
+            this._arr.pop()
         }
     </script>
 </body>
