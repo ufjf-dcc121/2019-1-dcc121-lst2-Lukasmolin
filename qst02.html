@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Qst02 - Pilha</title>
+</head>
+<body>
+    <h1>Pilha:</h1>
+    <form name="formPilha">
+        <input type="text" name="item" />
+        <input type="submit" value="empilha" />
+        <input type="button" value="desempilha" name="btnDesempilha"/>
+    </form>
+    <ol>
+    </ol>
+    <script>
+        var form = document.forms.formPilha
+        var pilha = new Pilha()
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault()
+            pilha.empilha(form.item.value)
+        })
+
+        form.btnDesempilha.addEventListener('click', function(){
+            pilha.desempilha()
+        })
+
+        /*Classe Pilha*/
+        function Pilha() {
+            this._olElemento = document.querySelector('ol')
+            this._arr = []
+        }
+
+        Pilha.prototype.empilha = function (item) {
+            this._arr.push(item)
+            var li = document.createElement('li')
+            li.textContent = item
+            this._olElemento.appendChild(li)
+        }
+
+        Pilha.prototype.desempilha = function(){
+            this._olElemento.lastElementChild.remove()
+            this._arr.pop()
+        }
+    </script>
+</body>
+</html>
