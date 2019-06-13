@@ -9,7 +9,23 @@
     <ol>   
     </ol>
     <script>
-        
+        /*Classe Pilha*/
+        function Pilha() {
+            this._olElemento = document.querySelector('ol')
+            this._arr = []
+        }
+
+        Pilha.prototype.empilha = function (item) {
+            this._arr.push(item)
+            var li = document.createElement('li')
+            li.textContent = item
+            this._olElemento.appendChild(li)
+        }
+
+        Pilha.prototype.desempilha = function(){
+            this._olElemento.lastElementChild.remove()
+            return this._arr.pop()
+        }
     </script>
 </body>
 </html>
