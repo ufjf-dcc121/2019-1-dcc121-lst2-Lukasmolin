@@ -41,7 +41,22 @@
         </table>
     </div>
     <script>
-       
+        function Animal(especie, altura, peso, velocidade, idade){
+            this.especie = especie;
+            this.altura = altura;
+            this.peso = peso;
+            this.velocidade = velocidade;
+            this.idade = idade;
+        }
+
+       function Form(){
+            this._form = document.forms.formAnimais
+       }
+
+       function Table(){
+           this._tbody = document.querySelector('table').tBodies[0]
+           this._tfoot = document.querySelector('table').tFoot
+       }
     </script>
 </body>
 </html>
