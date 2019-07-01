@@ -11,16 +11,16 @@
                 Nome do animal: <input type="text" name="especie">
             </label>
             <label>
-                Altura: <input type="text" name="altura">
+                Altura: <input type="number" name="altura">
             </label>
             <label>
-                Peso: <input type="text" name="peso">
+                Peso: <input type="number" name="peso">
             </label>
             <label>
-                Velocidade: <input type="text" name="velocidade">
+                Velocidade: <input type="number" name="velocidade">
             </label>
             <label>
-                Idade máxima: <input type="text" name="idadeMax">
+                Idade máxima: <input type="number" name="idadeMax">
             </label>
             <input type="submit" value="Enviar">
         </form>
@@ -41,6 +41,13 @@
         </table>
     </div>
     <script>
+        var f = new Form()
+        var t = new Table()
+        f._form.addEventListener('submit', function(e){
+            e.preventDefault()
+            t.addAnimal(f.geraAnimal())
+        })
+
         //Classe Animal
         function Animal(especie, altura, peso, velocidade, idade){
             this.especie = especie
@@ -75,6 +82,27 @@
             this._itens.push(animal)
             var linha = this._criaLinha(animal)
             this._tbody.appendChild(linha)
+            this._calcula()
+        }
+
+        Table.prototype._calcula = function(){
+            var media = new Animal("", 0, 0, 0, 0)
+            var quantidade = 0
+            this._itens.forEach(animal => {
+                media.altura += animal.altura
+                media.idade += animal.idade
+                media.peso += animal.peso
+                media.velocidade += animal.velocidade
+                quantidade++
+            });
+            media.altura /= quantidade
+            media.idade /= quantidade
+            media.peso /= quantidade
+            media.velocidade /= quantidade
+            var linha = this._criaLinha(media)
+            if(this._tfoot.hasChildNodes())
+                this._tfoot.removeChild(this._tfoot.firstElementChild)
+            this._tfoot.appendChild(linha)
         }
 
         Table.prototype._criaCelula = function(info){
@@ -83,7 +111,7 @@
             return cel
         }
 
-        Table.prototype.criaLinha = function(animal){
+        Table.prototype._criaLinha = function(animal){
             var linha = document.createElement('tr')
             linha.appendChild(this._criaCelula(animal.especie))
             linha.appendChild(this._criaCelula(animal.altura))
