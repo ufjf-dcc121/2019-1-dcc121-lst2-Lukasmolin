@@ -41,22 +41,57 @@
         </table>
     </div>
     <script>
+        //Classe Animal
         function Animal(especie, altura, peso, velocidade, idade){
-            this.especie = especie;
-            this.altura = altura;
-            this.peso = peso;
-            this.velocidade = velocidade;
-            this.idade = idade;
+            this.especie = especie
+            this.altura = Number(altura)
+            this.peso = Number(peso)
+            this.velocidade = Number(velocidade)
+            this.idade = Number(idade)
         }
 
-       function Form(){
-            this._form = document.forms.formAnimais
-       }
+        //Classe Form
+        function Form(){
+                this._form = document.forms.formAnimal
+        }
 
-       function Table(){
-           this._tbody = document.querySelector('table').tBodies[0]
-           this._tfoot = document.querySelector('table').tFoot
-       }
+        Form.prototype.geraAnimal = function(){
+            var especie = this._form.especie.value
+            var altura = this._form.altura.value
+            var peso = this._form.peso.value
+            var velocidade = this._form.peso.value
+            var idade = this._form.idadeMax.value
+            return new Animal(especie, altura, peso, velocidade, idade)
+        }
+
+        //Classe Table
+        function Table(){
+            this._tbody = document.querySelector('table').tBodies[0]
+            this._tfoot = document.querySelector('table').tFoot
+            this._itens = []
+        }
+
+        Table.prototype.addAnimal = function(animal){
+            this._itens.push(animal)
+            var linha = this._criaLinha(animal)
+            this._tbody.appendChild(linha)
+        }
+
+        Table.prototype._criaCelula = function(info){
+            var cel = document.createElement('td')
+            cel.innerText = info
+            return cel
+        }
+
+        Table.prototype.criaLinha = function(animal){
+            var linha = document.createElement('tr')
+            linha.appendChild(this._criaCelula(animal.especie))
+            linha.appendChild(this._criaCelula(animal.altura))
+            linha.appendChild(this._criaCelula(animal.peso))
+            linha.appendChild(this._criaCelula(animal.velocidade))
+            linha.appendChild(this._criaCelula(animal.idade))
+            return linha
+        }
     </script>
 </body>
 </html>
