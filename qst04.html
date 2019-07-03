@@ -68,7 +68,7 @@
             var especie = this._form.especie.value
             var altura = this._form.altura.value
             var peso = this._form.peso.value
-            var velocidade = this._form.peso.value
+            var velocidade = this._form.velocidade.value
             var idade = this._form.idadeMax.value
             return new Animal(especie, altura, peso, velocidade, idade)
         }
@@ -78,6 +78,7 @@
             this._tbody = document.querySelector('table').tBodies[0]
             this._tfoot = document.querySelector('table').tFoot
             this._itens = []
+            this._mediaPeso = 0;
         }
 
         Table.prototype.addAnimal = function(animal){
@@ -101,6 +102,8 @@
             media.idade /= quantidade
             media.peso /= quantidade
             media.velocidade /= quantidade
+
+            this._mediaPeso = media.peso
 
             var linha = this._criaLinha(media)
             if(this._tfoot.hasChildNodes())
@@ -126,6 +129,7 @@
 
         //Classe de informações da tabela
         function InfoTable(tabela){
+            this._tabela = tabela
             this._list = tabela._itens;
             this._area = document.createElement('div')
             document.body.appendChild(this._area)
@@ -136,6 +140,9 @@
                 this._area.removeChild(this._area.firstChild)
             }
             this.calculaMaisAlto();
+            this.calculaMaisPesado();
+            this.calculaMaisLongevo();
+            this.calculaMaisVeloz();
         }
 
         InfoTable.prototype._adicionaInfo = function(info) {
@@ -148,11 +155,49 @@
             var nomeMaisAlto = "Nenhum"
             var maiorAltura = 0
             for(var i = 0; i < this._list.length; i++){
-                if(this._list[i].altura > maiorAltura)
+                if(this._list[i].altura > maiorAltura){
+                    maiorAltura = this._list[i].altura
                     nomeMaisAlto = this._list[i].especie
+                }
             }
             this._adicionaInfo("O animal mais alto é " + nomeMaisAlto)
         }
+
+        InfoTable.prototype.calculaMaisPesado = function(){
+            var nomeMaisPesado = "Nenhum"
+            var maiorPeso = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].peso > maiorPeso){
+                    maiorPeso = this._list[i].peso
+                    nomeMaisPesado = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais Pesado é " + nomeMaisPesado)
+        }
+
+        InfoTable.prototype.calculaMaisVeloz = function(){
+            var nomeMaisVeloz = "Nenhum"
+            var maiorVelocidade = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].velocidade > maiorVelocidade){
+                    maiorVelocidade = this._list[i].velocidade
+                    nomeMaisVeloz = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais veloz é " + nomeMaisVeloz)
+        }
+
+        InfoTable.prototype.calculaMaisLongevo = function(){
+            var nomeMaisLongevo = "Nenhum"
+            var maiorVida = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].idade > maiorVida){
+                    maiorVida = this._list[i].idade
+                    nomeMaisLongevo = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais longevo é " + nomeMaisLongevo)
+        }       
 
 
     </script>
