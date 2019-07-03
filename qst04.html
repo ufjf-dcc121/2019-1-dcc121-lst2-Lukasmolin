@@ -143,6 +143,7 @@
             this.calculaMaisPesado();
             this.calculaMaisLongevo();
             this.calculaMaisVeloz();
+            this.calculaAcimaMediaPeso();
         }
 
         InfoTable.prototype._adicionaInfo = function(info) {
@@ -197,7 +198,21 @@
                 }
             }
             this._adicionaInfo("O animal mais longevo é " + nomeMaisLongevo)
-        }       
+        }
+
+        InfoTable.prototype.calculaAcimaMediaPeso = function(){
+            var nomes = []
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].peso > this._tabela._mediaPeso){
+                    nomes.push(this._list[i].especie)
+                }
+            }
+            var texto = ""
+            for(var i = 0; i < nomes.length; i++){
+                texto+= "O animal " + nomes[i] + " esta acima da media de peso!\n"
+            }
+            this._adicionaInfo(texto)
+        }
 
 
     </script>
