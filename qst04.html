@@ -43,9 +43,11 @@
     <script>
         var f = new Form()
         var t = new Table()
+        var i = new InfoTable(t)
         f._form.addEventListener('submit', function(e){
             e.preventDefault()
             t.addAnimal(f.geraAnimal())
+            i.calcula()
         })
 
         //Classe Animal
@@ -99,6 +101,7 @@
             media.idade /= quantidade
             media.peso /= quantidade
             media.velocidade /= quantidade
+
             var linha = this._criaLinha(media)
             if(this._tfoot.hasChildNodes())
                 this._tfoot.removeChild(this._tfoot.firstElementChild)
@@ -120,6 +123,38 @@
             linha.appendChild(this._criaCelula(animal.idade))
             return linha
         }
+
+        //Classe de informações da tabela
+        function InfoTable(tabela){
+            this._list = tabela._itens;
+            this._area = document.createElement('div')
+            document.body.appendChild(this._area)
+        }
+
+        InfoTable.prototype.calcula = function(){
+            while(this._area.firstChild){
+                this._area.removeChild(this._area.firstChild)
+            }
+            this.calculaMaisAlto();
+        }
+
+        InfoTable.prototype._adicionaInfo = function(info) {
+            var p = document.createElement('p')
+            p.innerText = info
+            this._area.appendChild(p)
+        }        
+
+        InfoTable.prototype.calculaMaisAlto = function(){
+            var nomeMaisAlto = "Nenhum"
+            var maiorAltura = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].altura > maiorAltura)
+                    nomeMaisAlto = this._list[i].especie
+            }
+            this._adicionaInfo("O animal mais alto é " + nomeMaisAlto)
+        }
+
+
     </script>
 </body>
 </html>
