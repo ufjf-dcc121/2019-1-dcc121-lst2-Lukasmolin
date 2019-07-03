@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Qst04 - Tabela animais</title>
+</head>
+<body>
+    <div>
+        <form name="formAnimal">
+            <label>
+                Nome do animal: <input type="text" name="especie">
+            </label>
+            <label>
+                Altura: <input type="number" name="altura">
+            </label>
+            <label>
+                Peso: <input type="number" name="peso">
+            </label>
+            <label>
+                Velocidade: <input type="number" name="velocidade">
+            </label>
+            <label>
+                Idade máxima: <input type="number" name="idadeMax">
+            </label>
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Especie</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Velocidade</th>
+                    <th>Idade max.</th>
+                </tr>                
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+    <script>
+        var f = new Form()
+        var t = new Table()
+        var i = new InfoTable(t)
+        f._form.addEventListener('submit', function(e){
+            e.preventDefault()
+            t.addAnimal(f.geraAnimal())
+            i.calcula()
+        })
+
+        //Classe Animal
+        function Animal(especie, altura, peso, velocidade, idade){
+            this.especie = especie
+            this.altura = Number(altura)
+            this.peso = Number(peso)
+            this.velocidade = Number(velocidade)
+            this.idade = Number(idade)
+        }
+
+        //Classe Form
+        function Form(){
+                this._form = document.forms.formAnimal
+        }
+
+        Form.prototype.geraAnimal = function(){
+            var especie = this._form.especie.value
+            var altura = this._form.altura.value
+            var peso = this._form.peso.value
+            var velocidade = this._form.velocidade.value
+            var idade = this._form.idadeMax.value
+            return new Animal(especie, altura, peso, velocidade, idade)
+        }
+
+        //Classe Table
+        function Table(){
+            this._tbody = document.querySelector('table').tBodies[0]
+            this._tfoot = document.querySelector('table').tFoot
+            this._itens = []
+            this._mediaPeso = 0;
+        }
+
+        Table.prototype.addAnimal = function(animal){
+            this._itens.push(animal)
+            var linha = this._criaLinha(animal)
+            this._tbody.appendChild(linha)
+            this._calcula()
+        }
+
+        Table.prototype._calcula = function(){
+            var media = new Animal("", 0, 0, 0, 0)
+            var quantidade = 0
+            this._itens.forEach(animal => {
+                media.altura += animal.altura
+                media.idade += animal.idade
+                media.peso += animal.peso
+                media.velocidade += animal.velocidade
+                quantidade++
+            });
+            media.altura /= quantidade
+            media.idade /= quantidade
+            media.peso /= quantidade
+            media.velocidade /= quantidade
+
+            this._mediaPeso = media.peso
+
+            var linha = this._criaLinha(media)
+            if(this._tfoot.hasChildNodes())
+                this._tfoot.removeChild(this._tfoot.firstElementChild)
+            this._tfoot.appendChild(linha)
+        }
+
+        Table.prototype._criaCelula = function(info){
+            var cel = document.createElement('td')
+            cel.innerText = info
+            return cel
+        }
+
+        Table.prototype._criaLinha = function(animal){
+            var linha = document.createElement('tr')
+            linha.appendChild(this._criaCelula(animal.especie))
+            linha.appendChild(this._criaCelula(animal.altura))
+            linha.appendChild(this._criaCelula(animal.peso))
+            linha.appendChild(this._criaCelula(animal.velocidade))
+            linha.appendChild(this._criaCelula(animal.idade))
+            return linha
+        }
+
+        //Classe de informações da tabela
+        function InfoTable(tabela){
+            this._tabela = tabela
+            this._list = tabela._itens;
+            this._area = document.createElement('div')
+            document.body.appendChild(this._area)
+        }
+
+        InfoTable.prototype.calcula = function(){
+            while(this._area.firstChild){
+                this._area.removeChild(this._area.firstChild)
+            }
+            this.calculaMaisAlto();
+            this.calculaMaisPesado();
+            this.calculaMaisLongevo();
+            this.calculaMaisVeloz();
+            this.calculaAcimaMediaPeso();
+        }
+
+        InfoTable.prototype._adicionaInfo = function(info) {
+            var p = document.createElement('p')
+            p.innerText = info
+            this._area.appendChild(p)
+        }        
+
+        InfoTable.prototype.calculaMaisAlto = function(){
+            var nomeMaisAlto = "Nenhum"
+            var maiorAltura = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].altura > maiorAltura){
+                    maiorAltura = this._list[i].altura
+                    nomeMaisAlto = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais alto é " + nomeMaisAlto)
+        }
+
+        InfoTable.prototype.calculaMaisPesado = function(){
+            var nomeMaisPesado = "Nenhum"
+            var maiorPeso = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].peso > maiorPeso){
+                    maiorPeso = this._list[i].peso
+                    nomeMaisPesado = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais Pesado é " + nomeMaisPesado)
+        }
+
+        InfoTable.prototype.calculaMaisVeloz = function(){
+            var nomeMaisVeloz = "Nenhum"
+            var maiorVelocidade = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].velocidade > maiorVelocidade){
+                    maiorVelocidade = this._list[i].velocidade
+                    nomeMaisVeloz = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais veloz é " + nomeMaisVeloz)
+        }
+
+        InfoTable.prototype.calculaMaisLongevo = function(){
+            var nomeMaisLongevo = "Nenhum"
+            var maiorVida = 0
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].idade > maiorVida){
+                    maiorVida = this._list[i].idade
+                    nomeMaisLongevo = this._list[i].especie
+                }
+            }
+            this._adicionaInfo("O animal mais longevo é " + nomeMaisLongevo)
+        }
+
+        InfoTable.prototype.calculaAcimaMediaPeso = function(){
+            var nomes = []
+            for(var i = 0; i < this._list.length; i++){
+                if(this._list[i].peso > this._tabela._mediaPeso){
+                    nomes.push(this._list[i].especie)
+                }
+            }
+            var texto = ""
+            for(var i = 0; i < nomes.length; i++){
+                texto+= "O animal " + nomes[i] + " esta acima da media de peso!\n"
+            }
+            this._adicionaInfo(texto)
+        }
+
+
+    </script>
+</body>
+</html>
